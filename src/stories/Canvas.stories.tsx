@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-// import { userEvent, within, waitFor, expect } from '@storybook/test';
+import { userEvent, within, waitFor, expect } from '@storybook/test';
 import CanvasHeader from '@/features/canvas/CanvasHeader';
 import { WidgetModel } from '@/types/widget'; 
 // import CanvasDisplay from '@/features/canvas/CanvasDisplay';
@@ -147,6 +147,20 @@ export const DeleteWidget: Story = {
     ],
     disableSave: true,
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement.ownerDocument.body);
+    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
+    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[3]);
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[2]);
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+  }
 };
 
 // Interactive test for editing widgets
@@ -175,9 +189,19 @@ export const EditWidgets: Story = {
     ],
     disableSave: true,
   },
-  // play: async ({ canvasElement }) => {
-    
-  // }
+  play: async ({ canvasElement }) => {
+    const body = canvasElement.ownerDocument.body;
+    const canvas = within(body);
+    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hi!');
+    await waitFor(() => expect(body.querySelector('.border div:nth-of-type(2)')).toBeInTheDocument());
+    await userEvent.click(body.querySelector('.border div:nth-of-type(2)')!);
+    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hi! What is this?');
+    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    await waitFor(() => expect(body.querySelector('.overflow-hidden')).toBeInTheDocument());
+    await userEvent.click(body.querySelector('.overflow-hidden')!);
+  }
 };
 
 // Interactive test for creating a new block via WidgetMenu
@@ -188,9 +212,15 @@ export const CreateNewWidget: Story = {
     defaultWidgets: [],
     disableSave: true,
   },
-  // play: async ({ canvasElement }) => {
-
-  // }
+  play: async ({ canvasElement }) => {
+    const body = canvasElement.ownerDocument.body;
+    const canvas = within(body);
+    await userEvent.click(await canvas.findByRole('button', { name: 'Add Widget' }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Text Block ⌘i' }));
+    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hello');
+    await waitFor(() => expect(body.querySelector('.relative')).toBeInTheDocument());
+  }
 }; 
 
 
@@ -222,6 +252,6 @@ export const Hotkeys: Story = {
     disableSave: true,
   },
   // play: async ({ canvasElement }) => {
-    
+    //TODO: Add some tests for hotkeys
   // }
 };
