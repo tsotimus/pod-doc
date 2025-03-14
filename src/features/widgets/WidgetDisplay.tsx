@@ -4,6 +4,7 @@ import { Rnd } from "react-rnd";
 import { useCanvas } from "@/features/canvas/CanvasContext";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { WidgetModel } from "@/types/widget";
+import { Textarea } from "@/components/ui/textarea";
 
 interface WidgetDisplayProps {
     widget: WidgetModel
@@ -41,13 +42,12 @@ const WidgetDisplay = ({ widget }: WidgetDisplayProps) => {
         >
             <ContextMenu>
                 <ContextMenuTrigger>
-                <textarea
+                <Textarea
                     className="w-full z-10 h-full p-4 text-black resize-none outline-none border-none bg-transparent"
                     value={widget.content}
                     onChange={(e) => updateWidgetContent(widget.id, e.target.value)}
                     placeholder="Enter text here..."
                     onClick={(e) => e.stopPropagation()}
-                    style={{ cursor: 'text' }}
                     onBlur={handleSave}
                 />
                 </ContextMenuTrigger>
