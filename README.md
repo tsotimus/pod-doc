@@ -15,8 +15,8 @@ Included:
 
 1. `pnpm install`
 2. Run `cp .env.example .env.local`
-3. `docker compose up -d`
-4. `pnpm dev`
+3. `docker compose up -d` - Start the MongoDB container
+4. `pnpm dev` - Start the development server
 5. (Recommended) Use [MongoDB Compass](https://www.mongodb.com/products/tools/compass) when developing locally
 
 ## Structure
