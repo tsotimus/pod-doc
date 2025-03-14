@@ -1,3 +1,5 @@
+import CanvasDisplay from "@/features/canvas/CanvasDisplay"
+import Typography from "@/components/ui/typography"
 import dbConnect from "@/lib/dbConnect"
 import Pod from "@/models/Pod"
 import { PodDisplay } from "@/types/pod"
@@ -32,7 +34,7 @@ const PodPage = async ({params}: {params: {id: string}}) => {
 
     return (
         <div className="flex flex-col gap-4">
-            Pod Found
+            <CanvasDisplay header={<Typography variant="h1">{pod.name}</Typography>} podId={id} />
         </div>
     )
 }

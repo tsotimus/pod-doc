@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { BlockModel, BlockSchema } from "@/types/block";
+import { WidgetModel, BlockSchema } from "@/types/widget";
 
 export type PodModel = {
   name: string;
-  blocks: BlockModel[];
+  blocks: WidgetModel[];
 };
 
 
@@ -12,7 +12,7 @@ export type PodDisplay = {
   name: string;
   createdAt: string;
   updatedAt: string;
-  blocks: BlockModel[];
+  blocks: WidgetModel[];
 };
 
 export const CreatePodSchema = z.object({

@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export type SupportedBlockTypes = "TEXT"
+export type SupportedWidgetTypes = "TEXT"
 
-export type BlockModel = {
+export type WidgetModel = {
     id: string
-    type: SupportedBlockTypes
+    type: SupportedWidgetTypes
     content: string
     positionX: number
     positionY: number
@@ -12,7 +12,7 @@ export type BlockModel = {
     height: number
 }
 
-export const BlockSchema = z.object({
+export const WidgetSchema = z.object({
     id: z.string(),
     type: z.enum(["TEXT"]),
     content: z.string(),
