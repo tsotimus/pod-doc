@@ -7,6 +7,13 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import axios from 'axios';
 import { toast } from 'sonner';
 import { hashWidgets } from '@/features/widgets/hashWidgets';
+import { 
+  removeWidget as removeWidgetOperation,
+  updateWidgetContent as updateWidgetContentOperation,
+  updateWidgetSize as updateWidgetSizeOperation,
+  updateWidgetPosition as updateWidgetPositionOperation,
+  addWidget as addWidgetOperation
+} from '@/features/widgets/widgetOperations';
 
 interface CanvasContextType {
   widgets: WidgetModel[];
@@ -95,60 +102,32 @@ export const CanvasProvider = ({ podId, children, defaultWidgets, disableSave }:
 
 
   useEffect(() => {
-    // Polling every 10 seconds
+    // Polling every 1 minute
     const intervalId = setInterval(() => {
       void handleSave();
-    }, 10000); 
+    }, 60000); 
     
     return () => clearInterval(intervalId);
   }, [handleSave]);
 
   const addWidget = (type: SupportedWidgetTypes, content = '') => {
-    const newWidget: WidgetModel = {
-      id: uuidv4(),
-      type: type,
-      content,
-      positionX: 100,
-      positionY: 100,
-      width: 320,
-      height: 200,
-    };
-    
-    setWidgets((prevWidgets) => [...prevWidgets, newWidget]);
+    setWidgets((prevWidgets) => addWidgetOperation(prevWidgets, type, content));
   };
 
   const updateWidgetPosition = (id: string, x: number, y: number) => {
-    setWidgets((prevWidgets) => 
-      prevWidgets.map((widget) => 
-        widget.id === id 
-          ? { ...widget, positionX: x, positionY: y } 
-          : widget
-      )
-    );
+    setWidgets((prevWidgets) => updateWidgetPositionOperation(prevWidgets, id, x, y));
   };
 
   const updateWidgetSize = (id: string, width: number, height: number) => {
-    setWidgets((prevWidgets) => 
-      prevWidgets.map((widget) => 
-        widget.id === id 
-          ? { ...widget, width, height } 
-          : widget
-      )
-    );
+    setWidgets((prevWidgets) => updateWidgetSizeOperation(prevWidgets, id, width, height));
   };
 
   const updateWidgetContent = (id: string, content: string) => {
-    setWidgets((prevWidgets) => 
-      prevWidgets.map((widget) => 
-        widget.id === id 
-          ? { ...widget, content } 
-          : widget
-      )
-    );
+    setWidgets((prevWidgets) => updateWidgetContentOperation(prevWidgets, id, content));
   };
 
   const removeWidget = (id: string) => {
-    setWidgets((prevWidgets) => prevWidgets.filter((widget) => widget.id !== id));
+    setWidgets((prevWidgets) => removeWidgetOperation(prevWidgets, id));
   };
 
   return (
