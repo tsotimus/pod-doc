@@ -13,10 +13,10 @@ import { cn } from "@/utils/client/cn";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   title: {
-    default: "Boilerplate",
-    template: `%s | Boilerplate`,
+    default: "Pod Builder",
+    template: `%s | Tsot`,
   },
-  description: "Building something cool",
+  description: "",
 };
 
 
