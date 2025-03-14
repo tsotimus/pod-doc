@@ -50,7 +50,7 @@ The requirement was to save when:
 
 Thing is, its quite difficult to tell when to save - how many seconds should you wait until a user is not using the keyboard? What if they are moving the Widgets around instead?
 
-In order not to risk sending too many requests to the backend I decided to employ a few different strategies:
+In order not to risk sending too many requests (saving on every change/keystroke) to the backend I decided to employ a few different strategies:
 
 - Only save when the user clicks away from the Widget (onBlur)
 - After 60 seconds we save (Polling)
@@ -64,8 +64,10 @@ Also I implemented **hashing** of the widgets to check if they have changed, so 
 
 - Implement a debounce strategy, probably to remove the polling (if we can get away with it)
 - Having 2 models, one for the Pod and one for the Widgets - this gives us more flexibility (we can add more widgets in the future) and we will be able to support larger Pods
-- Better Styling and Better UX
+- Add a `loading.tsx` file to handle the SSR loading state for `pods/[id]`
+- Better Styling and Better UX generally
 - More Widgets, enabled this via the `WidgetMenu` component and having a `Widget` Mongoose Model would further enable this
+- Device specific hotkeys (Currently only supporting Macs, and might not be on the best keys)
 - End to end testing for Creating a Pod and then creating a Text Widget inside it using Playwright
 - Limit the area that the user can move widgets around (currently theres no limit, which isn't good)
 - Silent saving (no need for a toast notification every time we save... maybe)
