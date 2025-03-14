@@ -11,7 +11,8 @@
     "ui-add": "pnpm dlx shadcn@canary add ",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "test:storybook": "test-storybook",
+    "test:unit": "vitest --config vitest.unit.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
