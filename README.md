@@ -15,7 +15,7 @@ Included:
 ## Getting Started
 
 1. `pnpm install`
-2. Create your `.env.local` file following the `.env.example` file
+2. Run `cp .env.example .env.local`
 3. `docker compose up -d`
 4. `pnpm dev`
 5. (Recommended) Use [MongoDB Compass](https://www.mongodb.com/products/tools/compass) when developing locally
@@ -31,9 +31,3 @@ Included:
 - `types/` - Typescript types
 - `utils/` - Utility functions, split between server and client
 - `styles/` - Global styles
-
-### Adding new env variables
-
-- Add the variable to `.env.example`
-- Add the variable to `env.d.ts`
-- Add the variable to `.env.local`
