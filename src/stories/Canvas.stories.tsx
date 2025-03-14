@@ -150,8 +150,6 @@ export const DeleteWidget: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement.ownerDocument.body);
     
-    // Delete all widgets one by one
-    // We have 5 widgets to delete
     for (let i = 0; i < 5; i++) {
       // Get all text areas - after each deletion, there will be one fewer
       const textAreas = await canvas.findAllByPlaceholderText('Enter text here...', { exact: true });
