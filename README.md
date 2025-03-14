@@ -1,6 +1,6 @@
-# Next-Quick
+# Pods & Widgets
 
-A boilerplate for Next.js with a quick start.
+An App for creating and editing Pods and Widgets.
 
 Included:
 
@@ -8,7 +8,6 @@ Included:
 - MongoDB via Mongoose
 - Tailwind
 - Shadcn
-- [Nuqs](https://nuqs.47ng.com/)
 - [Sonner](https://sonner.emilkowal.ski/)
 
 
@@ -66,6 +65,7 @@ Also I implemented **hashing** of the widgets to check if they have changed, so 
 - Implement a debounce strategy, probably to remove the polling (if we can get away with it)
 - Having 2 models, one for the Pod and one for the Widgets - this gives us more flexibility (we can add more widgets in the future) and we will be able to support larger Pods
 - Better Styling and Better UX
+- More Widgets, enabled this via the `WidgetMenu` component and having a `Widget` Mongoose Model would further enable this
 - End to end testing for Creating a Pod and then creating a Text Widget inside it using Playwright
 - Limit the area that the user can move widgets around (currently theres no limit, which isn't good)
 - Silent saving (no need for a toast notification every time we save... maybe)
