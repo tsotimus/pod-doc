@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, PropsWithChildren } from 'react';
+import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { WidgetModel, SupportedWidgetTypes } from '@/types/widget';
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -56,12 +56,24 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
   };
   
   const handleSave = () => {
+
+    //TODO: Check if we have made any changes to the widgets via hashing
+
     toast.promise(onSave(), {
       loading: 'Saving...',
       success: 'Pod saved',
       error: 'Failed to save pod'
     });
   };
+
+  useEffect(() => {
+    //Polling every 10 seconds
+    const intervalId = setInterval(() => {
+      handleSave();
+    }, 10000); 
+    
+    return () => clearInterval(intervalId);
+  }, []);
 
 
   const addWidget = (type: SupportedWidgetTypes, content = '') => {
