@@ -15,7 +15,7 @@ interface CanvasContextType {
   updateWidgetSize: (id: string, width: number, height: number) => void;
   updateWidgetContent: (id: string, content: string) => void;
   removeWidget: (id: string) => void;
-  handleSave: () => void;
+  handleSave: (force?: boolean) => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -29,20 +29,16 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
   const [widgets, setWidgets] = useState<WidgetModel[]>(defaultWidgets ?? []);
   const lastSavedHashRef = useRef<string | null>(null);
 
-  useHotkeys('ctrl+s', () => {
-    void handleSave();
-  });
-
-  useHotkeys('alt+s', (e) => {
+  useHotkeys('meta+p', (e) => {
     e.preventDefault();
-    void handleSave();
+    void handleSave(true);
   }, {
     enableOnFormTags: false,
     preventDefault: true,
     description: 'Save the current canvas'
   });
 
-  useHotkeys('alt+t', (e) => {
+  useHotkeys('meta+i', (e) => {
     e.preventDefault();
     addWidget("TEXT", "");
   }, {
@@ -58,10 +54,10 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
     });
   };
   
-  const handleSave = useCallback(async () => {
+  const handleSave = useCallback(async (force = false) => {
     const currentHash = await hashWidgets(widgets);
     
-    if (lastSavedHashRef.current !== currentHash) {
+    if (force || lastSavedHashRef.current !== currentHash) {
       toast.promise(onSave(), {
         loading: 'Saving...',
         success: () => {
@@ -151,7 +147,7 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
         updateWidgetSize, 
         updateWidgetContent, 
         removeWidget,
-        handleSave: () => { void handleSave(); }
+        handleSave: (force = false) => { void handleSave(force); }
       }}
     >
       {children}

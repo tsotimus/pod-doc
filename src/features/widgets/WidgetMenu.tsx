@@ -32,7 +32,7 @@ const WidgetMenu = () => {
                     <DropdownMenuItem className="flex flex-row items-center text-white" onClick={handleAddTextBlock}>
                         <Text className="w-4 h-4 mr-2"/>
                         Text Block
-                        <DropdownMenuShortcut>⌥T</DropdownMenuShortcut>
+                        <DropdownMenuShortcut>⌘i</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     {/* Add more block types as needed here */}
                 </DropdownMenuGroup>
