@@ -1,4 +1,5 @@
-import HomeDisplay from "@/features/home/HomeDisplay";
+import PodsHeader from "@/features/pods/PodsHeader";
+import PodsList from "@/features/pods/PodsList";
 import dbConnect from "@/lib/dbConnect";
 import Pod from "@/models/Pod";
 import { PodDisplay } from "@/types/pod";
@@ -13,15 +14,13 @@ const getAllPods = async() => {
 }
 
 
-
 export default async function Home() {
 
   const pods = await getAllPods()
-
   return (
-    <div>
-      <HomeDisplay/>
-      <p>Num of Pods: {pods.data.length}</p>
+    <div className="flex flex-col gap-4">
+      <PodsHeader />
+      <PodsList initialPods={pods} />
     </div>
   );
 }
