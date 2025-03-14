@@ -1,28 +1,27 @@
 import HomeDisplay from "@/features/home/HomeDisplay";
 import dbConnect from "@/lib/dbConnect";
-import User from "@/models/User";
-import { type UserModel } from "@/types/user";
+import Pod from "@/models/Pod";
+import { PodDisplay } from "@/types/pod";
+import { createApiResponse } from "@/utils/server/responses";
 import { type HydratedDocument } from "mongoose";
 
-export const revalidate = 60
 
-const getAllUsers = async() => {
-
+const getAllPods = async() => {
   await dbConnect()
-  const allUsers = await User.find<HydratedDocument<UserModel>>()
-
-  return allUsers.map((user) => user.toJSON())
+  const allPods = await Pod.find<HydratedDocument<PodDisplay>>()
+  return createApiResponse({data: allPods.map((pod) => pod.toJSON())})
 }
+
 
 
 export default async function Home() {
 
-  const users = await getAllUsers()
+  const pods = await getAllPods()
 
   return (
     <div>
       <HomeDisplay/>
-      <p>Num of Users: {users.length}</p>
+      <p>Num of Pods: {pods.data.length}</p>
     </div>
   );
 }
