@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "ui-add": "pnpm dlx shadcn@canary add "
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
