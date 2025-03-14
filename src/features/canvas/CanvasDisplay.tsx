@@ -4,21 +4,22 @@ import { ReactNode } from "react"
 import { CanvasProvider } from "./CanvasContext"
 import { Separator } from "@/components/ui/separator"
 import { WidgetModel } from "@/types/widget"
+import CanvasArea from "./CanvasArea"
 
 
 interface CanvasDisplayProps {
     podId: string
     header: ReactNode
-    defaultBlocks?: WidgetModel[]    
+    defaultWidgets?: WidgetModel[]    
 }
 
-const CanvasDisplay = ({ header, podId, defaultBlocks }:CanvasDisplayProps) => {
+const CanvasDisplay = ({ header, podId, defaultWidgets = [] }:CanvasDisplayProps) => {
     return (
-        <CanvasProvider podId={podId} defaultBlocks={defaultBlocks}>
+        <CanvasProvider podId={podId} defaultWidgets={defaultWidgets}>
             <div className="flex flex-col w-full gap-4">
                 {header}
                 <Separator />
-                {/* <Show Canvas Here /> */}
+                <CanvasArea />
             </div>
         </CanvasProvider>
     )

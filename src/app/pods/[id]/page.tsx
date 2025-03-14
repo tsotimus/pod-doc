@@ -5,6 +5,7 @@ import Pod from "@/models/Pod"
 import { PodDisplay } from "@/types/pod"
 import { HydratedDocument } from "mongoose"
 import { notFound } from "next/navigation"
+import CanvasHeader from "@/features/canvas/CanvasHeader"
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,7 @@ const PodPage = async ({params}: {params: {id: string}}) => {
 
     return (
         <div className="flex flex-col gap-4">
-            <CanvasDisplay header={<Typography variant="h1">{pod.name}</Typography>} podId={id} />
+            <CanvasDisplay header={<CanvasHeader pod={pod} />} podId={id} />
         </div>
     )
 }

@@ -8,12 +8,12 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 interface CanvasContextType {
-  blocks: WidgetModel[];
-  addBlock: (type: SupportedWidgetTypes, content: string) => void;
-  updateBlockPosition: (id: string, x: number, y: number) => void;
-  updateBlockSize: (id: string, width: number, height: number) => void;
-  updateBlockContent: (id: string, content: string) => void;
-  removeBlock: (id: string) => void;
+  widgets: WidgetModel[];
+  addWidget: (type: SupportedWidgetTypes, content: string) => void;
+  updateWidgetPosition: (id: string, x: number, y: number) => void;
+  updateWidgetSize: (id: string, width: number, height: number) => void;
+  updateWidgetContent: (id: string, content: string) => void;
+  removeWidget: (id: string) => void;
   handleSave: () => void;
 }
 
@@ -21,19 +21,37 @@ const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 
 interface CanvasProviderProps {
     podId: string
-    defaultBlocks?: WidgetModel[]
+    defaultWidgets?: WidgetModel[]
 }
 
-export const CanvasProvider = ({ podId, children, defaultBlocks }: PropsWithChildren<CanvasProviderProps>) => {
-  const [blocks, setBlocks] = useState<WidgetModel[]>(defaultBlocks ?? []);
+export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChildren<CanvasProviderProps>) => {
+  const [widgets, setWidgets] = useState<WidgetModel[]>(defaultWidgets ?? []);
 
   useHotkeys('ctrl+s', () => {
     handleSave();
   });
 
+  useHotkeys('alt+s', (e) => {
+    e.preventDefault();
+    handleSave();
+  }, {
+    enableOnFormTags: false,
+    preventDefault: true,
+    description: 'Save the current canvas'
+  });
+
+  useHotkeys('alt+t', (e) => {
+    e.preventDefault();
+    addWidget("TEXT", "");
+  }, {
+    enableOnFormTags: false,
+    preventDefault: true,
+    description: 'Add a new text block'
+  });
+
   const onSave = () => {
     return axios.patch(`/api/v1/pods/${podId}`, {
-      blocks: blocks
+      widgets: widgets
     });
   };
   
@@ -46,8 +64,8 @@ export const CanvasProvider = ({ podId, children, defaultBlocks }: PropsWithChil
   };
 
 
-  const addBlock = (type: SupportedWidgetTypes, content = '') => {
-    const newBlock: WidgetModel = {
+  const addWidget = (type: SupportedWidgetTypes, content = '') => {
+    const newWidget: WidgetModel = {
       id: uuidv4(),
       type: type,
       content,
@@ -57,52 +75,52 @@ export const CanvasProvider = ({ podId, children, defaultBlocks }: PropsWithChil
       height: 200,
     };
     
-    setBlocks((prevBlocks) => [...prevBlocks, newBlock]);
+    setWidgets((prevWidgets) => [...prevWidgets, newWidget]);
   };
 
-  const updateBlockPosition = (id: string, x: number, y: number) => {
-    setBlocks((prevBlocks) => 
-      prevBlocks.map((block) => 
-        block.id === id 
-          ? { ...block, positionX: x, positionY: y } 
-          : block
+  const updateWidgetPosition = (id: string, x: number, y: number) => {
+    setWidgets((prevWidgets) => 
+      prevWidgets.map((widget) => 
+        widget.id === id 
+          ? { ...widget, positionX: x, positionY: y } 
+          : widget
       )
     );
   };
 
-  const updateBlockSize = (id: string, width: number, height: number) => {
-    setBlocks((prevBlocks) => 
-      prevBlocks.map((block) => 
-        block.id === id 
-          ? { ...block, width, height } 
-          : block
+  const updateWidgetSize = (id: string, width: number, height: number) => {
+    setWidgets((prevWidgets) => 
+      prevWidgets.map((widget) => 
+        widget.id === id 
+          ? { ...widget, width, height } 
+          : widget
       )
     );
   };
 
-  const updateBlockContent = (id: string, content: string) => {
-    setBlocks((prevBlocks) => 
-      prevBlocks.map((block) => 
-        block.id === id 
-          ? { ...block, content } 
-          : block
+  const updateWidgetContent = (id: string, content: string) => {
+    setWidgets((prevWidgets) => 
+      prevWidgets.map((widget) => 
+        widget.id === id 
+          ? { ...widget, content } 
+          : widget
       )
     );
   };
 
-  const removeBlock = (id: string) => {
-    setBlocks((prevBlocks) => prevBlocks.filter((block) => block.id !== id));
+  const removeWidget = (id: string) => {
+    setWidgets((prevWidgets) => prevWidgets.filter((widget) => widget.id !== id));
   };
 
   return (
     <CanvasContext.Provider 
       value={{ 
-        blocks, 
-        addBlock, 
-        updateBlockPosition, 
-        updateBlockSize, 
-        updateBlockContent, 
-        removeBlock,
+        widgets, 
+        addWidget, 
+        updateWidgetPosition, 
+        updateWidgetSize, 
+        updateWidgetContent, 
+        removeWidget,
         handleSave
       }}
     >
