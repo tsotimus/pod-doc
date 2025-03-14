@@ -9,7 +9,7 @@ const PodSchema = new mongoose.Schema<PodModel>(
       required: true,
     },
     //Not scalable, but it's ok for now
-    blocks: [{
+    widgets: [{
       _id: false,
       id: {
         type: String,
