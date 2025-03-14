@@ -269,7 +269,7 @@ export const Hotkeys: Story = {
   args: {
     podId: 'story-pod-id',
     header: <CanvasHeader pod={createMockPod([{
-      id: 'test-block',
+      id: 'test-hotkeys',
       type: 'TEXT',
       content: 'Edit this text',
       positionX: 200,
