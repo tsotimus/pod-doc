@@ -5,7 +5,7 @@ import { useCanvas } from "@/features/canvas/CanvasContext";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { WidgetModel } from "@/types/widget";
 import { Textarea } from "@/components/ui/textarea";
-
+import { Trash } from "lucide-react";
 interface WidgetDisplayProps {
     widget: WidgetModel
 }
@@ -48,11 +48,14 @@ const WidgetDisplay = ({ widget }: WidgetDisplayProps) => {
                     onChange={(e) => updateWidgetContent(widget.id, e.target.value)}
                     placeholder="Enter text here..."
                     onClick={(e) => e.stopPropagation()}
-                    onBlur={handleSave}
+                    onBlur={() => handleSave()}
                 />
                 </ContextMenuTrigger>
-                <ContextMenuContent className="w-fit z-50 bg-black" >
-                    <ContextMenuItem className="cursor-pointer" onSelect={handleDelete}>Delete</ContextMenuItem>
+                <ContextMenuContent className="w-fit z-50 bg-black text-white">
+                    <ContextMenuItem className="cursor-pointer" onSelect={handleDelete}>
+                        Delete
+                        <Trash className="w-4 h-4 ml-2 text-red-500" />
+                    </ContextMenuItem>
                 </ContextMenuContent>
             </ContextMenu>
         </Rnd>

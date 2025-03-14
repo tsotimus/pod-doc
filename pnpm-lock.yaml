@@ -209,6 +209,9 @@ devDependencies:
   storybook:
     specifier: ^8.6.4
     version: 8.6.4
+  storybook-addon-test-codegen:
+    specifier: ^1.1.1
+    version: 1.1.1(storybook@8.6.4)
   tailwindcss:
     specifier: ^4.0.12
     version: 4.0.12
@@ -5371,6 +5374,7 @@ packages:
 
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+    requiresBuild: true
 
   /color-string@1.9.1:
     resolution: {integrity: sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==}
@@ -9437,6 +9441,14 @@ packages:
 
   /std-env@3.8.1:
     resolution: {integrity: sha512-vj5lIj3Mwf9D79hBkltk5qmkFI+biIKWS2IBxEyEU3AX1tUf7AoL8nSazCOiiqQsGKIq01SClsKEzweu34uwvA==}
+    dev: true
+
+  /storybook-addon-test-codegen@1.1.1(storybook@8.6.4):
+    resolution: {integrity: sha512-/JW753sQtWYGXm66UpsLV2Yile/AUcDq6aIHcxHi6vz+uKVIGEfc1cLfYFaFnVsXfWcyWujqRNVjzaC6YPazQA==}
+    peerDependencies:
+      storybook: '>=8.3.0'
+    dependencies:
+      storybook: 8.6.4
     dev: true
 
   /storybook@8.6.4:

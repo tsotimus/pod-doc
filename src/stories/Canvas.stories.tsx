@@ -81,8 +81,8 @@ export const EmptyCanvas: Story = {
   },
 };
 
-// Canvas with many widgets
-export const ManyWidgets: Story = {
+// Delete Widget Test
+export const DeleteWidget: Story = {
   args: {
     podId: 'story-pod-id',
     header: <CanvasHeader pod={createMockPod([
@@ -180,7 +180,7 @@ export const EditWidgets: Story = {
   // }
 };
 
-// Interactive test for creating a new block via BlockMenu
+// Interactive test for creating a new block via WidgetMenu
 export const CreateNewWidget: Story = {
   args: {
     podId: 'story-pod-id',
@@ -192,3 +192,36 @@ export const CreateNewWidget: Story = {
 
   // }
 }; 
+
+
+
+// Interactive test for hotkeys
+export const Hotkeys: Story = {
+  args: {
+    podId: 'story-pod-id',
+    header: <CanvasHeader pod={createMockPod([{
+      id: 'test-block',
+      type: 'TEXT',
+      content: 'Edit this text',
+      positionX: 200,
+      positionY: 200,
+      width: 300,
+      height: 150,
+    }])} />,
+    defaultWidgets: [
+      {
+        id: 'test-block',
+        type: 'TEXT',
+        content: 'Edit this text',
+        positionX: 200,
+        positionY: 200,
+        width: 300,
+        height: 150,
+      }
+    ],
+    disableSave: true,
+  },
+  // play: async ({ canvasElement }) => {
+    
+  // }
+};
