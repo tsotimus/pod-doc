@@ -23,9 +23,10 @@ const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 interface CanvasProviderProps {
     podId: string
     defaultWidgets?: WidgetModel[]
+    disableSave?: boolean
 }
 
-export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChildren<CanvasProviderProps>) => {
+export const CanvasProvider = ({ podId, children, defaultWidgets, disableSave }: PropsWithChildren<CanvasProviderProps>) => {
   const [widgets, setWidgets] = useState<WidgetModel[]>(defaultWidgets ?? []);
   const lastSavedHashRef = useRef<string | null>(null);
 
@@ -58,17 +59,29 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
     const currentHash = await hashWidgets(widgets);
     
     if (force || lastSavedHashRef.current !== currentHash) {
-      toast.promise(onSave(), {
-        loading: 'Saving...',
-        success: () => {
-          // Update the hash reference after successful save
-          lastSavedHashRef.current = currentHash;
-          return 'Pod saved';
-        },
-        error: 'Failed to save pod'
-      });
+      if (disableSave) {
+        // Fake save with the same toast behavior
+        toast.promise(Promise.resolve(), {
+          loading: 'Saving...',
+          success: () => {
+            lastSavedHashRef.current = currentHash;
+            return 'Pod saved';
+          },
+          error: 'Failed to save pod'
+        });
+      } else {
+        toast.promise(onSave(), {
+          loading: 'Saving...',
+          success: () => {
+            // Update the hash reference after successful save
+            lastSavedHashRef.current = currentHash;
+            return 'Pod saved';
+          },
+          error: 'Failed to save pod'
+        });
+      }
     }
-  }, [widgets, podId]);
+  }, [widgets, podId, disableSave]);
 
   useEffect(() => {
     // Initialize the hash when the component mounts
