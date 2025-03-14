@@ -1,11 +1,12 @@
 "use client"
 
-import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
+import React, { createContext, useContext, useState, PropsWithChildren, useEffect, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { WidgetModel, SupportedWidgetTypes } from '@/types/widget';
 import { useHotkeys } from 'react-hotkeys-hook'
 import axios from 'axios';
 import { toast } from 'sonner';
+import { hashWidgets } from '@/features/widgets/hashWidgets';
 
 interface CanvasContextType {
   widgets: WidgetModel[];
@@ -26,14 +27,15 @@ interface CanvasProviderProps {
 
 export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChildren<CanvasProviderProps>) => {
   const [widgets, setWidgets] = useState<WidgetModel[]>(defaultWidgets ?? []);
+  const lastSavedHashRef = useRef<string | null>(null);
 
   useHotkeys('ctrl+s', () => {
-    handleSave();
+    void handleSave();
   });
 
   useHotkeys('alt+s', (e) => {
     e.preventDefault();
-    handleSave();
+    void handleSave();
   }, {
     enableOnFormTags: false,
     preventDefault: true,
@@ -49,32 +51,48 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
     description: 'Add a new text block'
   });
 
+
   const onSave = () => {
     return axios.patch(`/api/v1/pods/${podId}`, {
       widgets: widgets
     });
   };
   
-  const handleSave = () => {
-
-    //TODO: Check if we have made any changes to the widgets via hashing
-
-    toast.promise(onSave(), {
-      loading: 'Saving...',
-      success: 'Pod saved',
-      error: 'Failed to save pod'
-    });
-  };
+  const handleSave = useCallback(async () => {
+    const currentHash = await hashWidgets(widgets);
+    
+    if (lastSavedHashRef.current !== currentHash) {
+      toast.promise(onSave(), {
+        loading: 'Saving...',
+        success: () => {
+          // Update the hash reference after successful save
+          lastSavedHashRef.current = currentHash;
+          return 'Pod saved';
+        },
+        error: 'Failed to save pod'
+      });
+    }
+  }, [widgets, podId]);
 
   useEffect(() => {
-    //Polling every 10 seconds
+    // Initialize the hash when the component mounts
+    void hashWidgets(widgets).then(hash => {
+      lastSavedHashRef.current = hash;
+    }).catch(err => {
+      console.error('Failed to hash widgets:', err);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+  useEffect(() => {
+    // Polling every 10 seconds
     const intervalId = setInterval(() => {
-      handleSave();
+      void handleSave();
     }, 10000); 
     
     return () => clearInterval(intervalId);
-  }, []);
-
+  }, [handleSave]);
 
   const addWidget = (type: SupportedWidgetTypes, content = '') => {
     const newWidget: WidgetModel = {
@@ -133,7 +151,7 @@ export const CanvasProvider = ({ podId, children, defaultWidgets }: PropsWithChi
         updateWidgetSize, 
         updateWidgetContent, 
         removeWidget,
-        handleSave
+        handleSave: () => { void handleSave(); }
       }}
     >
       {children}
