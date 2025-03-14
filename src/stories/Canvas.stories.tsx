@@ -149,17 +149,25 @@ export const DeleteWidget: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement.ownerDocument.body);
-    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
-    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
-    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[3]);
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
-    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[2]);
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
-    await userEvent.click((await canvas.findAllByPlaceholderText('Enter text here...', { exact: true }))[1]);
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
-    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+    
+    // Delete all widgets one by one
+    // We have 5 widgets to delete
+    for (let i = 0; i < 5; i++) {
+      // Get all text areas - after each deletion, there will be one fewer
+      const textAreas = await canvas.findAllByPlaceholderText('Enter text here...', { exact: true });
+      
+      // Always target the first text area
+      const textArea = textAreas[0];
+      
+      // Right-click on the text area to open the context menu
+      await userEvent.pointer({ keys: '[MouseRight]', target: textArea });
+      
+      // Click the Delete menu item
+      await userEvent.click(await canvas.findByRole('menuitem', { name: 'Delete' }));
+      
+      // Add a small delay to allow the deletion to complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
   }
 };
 
@@ -192,14 +200,34 @@ export const EditWidgets: Story = {
   play: async ({ canvasElement }) => {
     const body = canvasElement.ownerDocument.body;
     const canvas = within(body);
-    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
-    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hi!');
+    
+    // Find and click the text area
+    const textArea = await canvas.findByPlaceholderText('Enter text here...', { exact: true });
+    await userEvent.click(textArea);
+    
+    // Type "Hi!" in the text area
+    await userEvent.type(textArea, 'Hi!');
+    
+    // Wait for the border element to appear
     await waitFor(() => expect(body.querySelector('.border div:nth-of-type(2)')).toBeInTheDocument());
+    
+    // Click on the border element
     await userEvent.click(body.querySelector('.border div:nth-of-type(2)')!);
-    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
-    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hi! What is this?');
-    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    
+    // Find the text area again and click it
+    const textAreaAgain = await canvas.findByPlaceholderText('Enter text here...', { exact: true });
+    await userEvent.click(textAreaAgain);
+    
+    // Type more text
+    await userEvent.type(textAreaAgain, 'Hi! What is this?');
+    
+    // Click the text area again
+    await userEvent.click(textAreaAgain);
+    
+    // Wait for the overflow-hidden element to appear
     await waitFor(() => expect(body.querySelector('.overflow-hidden')).toBeInTheDocument());
+    
+    // Click on the overflow-hidden element
     await userEvent.click(body.querySelector('.overflow-hidden')!);
   }
 };
@@ -215,10 +243,23 @@ export const CreateNewWidget: Story = {
   play: async ({ canvasElement }) => {
     const body = canvasElement.ownerDocument.body;
     const canvas = within(body);
+    
+    // Click the Add Widget button to open the dropdown
     await userEvent.click(await canvas.findByRole('button', { name: 'Add Widget' }));
-    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Text Block ⌘i' }));
-    await userEvent.click(await canvas.findByPlaceholderText('Enter text here...', { exact: true }));
-    await userEvent.type(await canvas.findByPlaceholderText('Enter text here...', { exact: true }), 'Hello');
+    
+    // Wait for the dropdown to appear and click the Text Block menu item
+    // Note: In a dropdown menu, we need to use the correct role
+    await userEvent.click(await canvas.findByText('Text Block'));
+    
+    // Wait for the new text area to appear
+    await waitFor(() => canvas.findByPlaceholderText('Enter text here...', { exact: true }));
+    
+    // Type in the new text area
+    const textArea = await canvas.findByPlaceholderText('Enter text here...', { exact: true });
+    await userEvent.click(textArea);
+    await userEvent.type(textArea, 'Hello');
+    
+    // Verify the widget was created
     await waitFor(() => expect(body.querySelector('.relative')).toBeInTheDocument());
   }
 }; 

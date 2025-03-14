@@ -10,7 +10,8 @@
     "lint:fix": "next lint --fix",
     "ui-add": "pnpm dlx shadcn@canary add ",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -64,6 +65,7 @@
     "@storybook/nextjs": "^8.6.4",
     "@storybook/react": "^8.6.4",
     "@storybook/test": "^8.6.4",
+    "@storybook/test-runner": "^0.22.0",
     "@tailwindcss/postcss": "^4.0.12",
     "@types/formidable": "^3",
     "@types/node": "^20",
